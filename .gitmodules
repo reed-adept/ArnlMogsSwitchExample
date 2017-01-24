@@ -1,0 +1,3 @@
+[submodule "ArnlTaskExamples"]
+	path = ArnlTaskExamples
+	url = https://github.com/reed-adept/ArnlTaskExamples.git
