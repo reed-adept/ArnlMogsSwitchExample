@@ -1,3 +1,6 @@
 [submodule "ArnlTaskExamples"]
 	path = ArnlTaskExamples
 	url = https://github.com/reed-adept/ArnlTaskExamples.git
+[submodule "MOGSMapTools"]
+	path = MOGSMapTools
+	url = http://github.com/reed-adept/MOGSMapTools
