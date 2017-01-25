@@ -36,6 +36,8 @@ in LICENSE.txt (refer to LICENSE.txt for details).
 
 //#include "ArnlASyncTask.h"
 
+#include "MOGSMapTools/GPSMapTools.h"
+
 #include <assert.h>
 
 #include <string>
@@ -1373,6 +1375,9 @@ ArRetFunctorC<double, ArRobot>(&robot, &ArRobot::getOdometerTimeMinutes),
   Aria::getInfoGroup()->addStringString("Current Localization", 10, new ArRetFunctorC<std::string, LocSwitcher>(&locSwitch, &LocSwitcher::getActiveLocName));
 
   LocSwitchAtGoal locSwitchAtGoal(&pathTask, &locSwitch, "SwitchToGPS", "SwitchToLaser");
+
+  // GPS Map Tools
+  GPSMapTools gpsMapTools(gps, &robot, &commands, &map, &serverMap, &popupServer);
 
   // Do an initial localization of the robot. ARNL and SONARNL try all the home points
   // in the map, as well as the robot's current odometric position, as possible

@@ -4,7 +4,7 @@ TARGETS=arnlMogsSwitchServer #ArnlTaskExamples/*.h
 STATICTARGETS=$(patsubst %,%Static,$(TARGETS))
 
 # Just used to generate all dependencies:
-SOURCES=arnlMogsSwitchServer.cpp #Switcher.h
+SOURCES=arnlMogsSwitchServer.cpp MOGSMapTools/GPSMapTools.cpp MOGSMapTools/GPSMapTools.h #Switcher.h
 
 ifndef ARNL
 ARNL:=/usr/local/Arnl
@@ -30,10 +30,10 @@ all: $(TARGETS)
 
 static: $(STATICTARGETS)
 
-arnlMogsSwitchServer: arnlMogsSwitchServer.cpp
+arnlMogsSwitchServer: arnlMogsSwitchServer.cpp MOGSMapTools/GPSMapTools.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) $(LFLAGS) -o $@ $^ -lArnl $(LINK)
 
-arnlMogsSwitchServerStatic: arnlMogsSwitchServer.cpp
+arnlMogsSwitchServerStatic: arnlMogsSwitchServer.cpp MOGSMapTools/GPSMapTools.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) $(LFLAGS) -o $@ $^ $(ARNL)/lib/libArnl.a $(STATICLINK)
 	strip $@
 
