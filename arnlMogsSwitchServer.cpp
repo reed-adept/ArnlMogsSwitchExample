@@ -601,16 +601,6 @@ int main(int argc, char **argv)
   ArLaserConnector laserConnector(&parser, &robot, &robotConnector);
 
 
-  // Used to connect to a "central server" which can be used as a proxy
-  // for multiple robot servers, and as a way for them to also communicate with
-  // each other.  (objects implementing some of these inter-robot communication
-  // features are created below).
-  // NOTE: If the central server is running on the same host as robot server(s),
-  // then you must use the -serverPort argument to instruct these robot-control
-  // server(s) to use different ports than the default 7272, since the central
-  // server will use that port.
-  ArClientSwitchManager clientSwitch(&server, &parser);
-
   // Load default arguments for this computer (from /etc/Aria.args, environment
   // variables, and other places)
   parser.loadDefaultArguments();
