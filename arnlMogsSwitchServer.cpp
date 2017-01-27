@@ -956,11 +956,12 @@ int main(int argc, char **argv)
   ArServerInfoStrings stringInfo(&server);
   Aria::getInfoGroup()->addAddStringCallback(stringInfo.getAddStringFunctor());
 
+
+
+
   // The following statements add fields to a set of informational data called
   // the InfoGroup. These are served to MobileEyes for displayi (turn on by enabling Details
   // and Custom Details in the View menu of MobileEyes.)
-
-
 
   // loc states
   Aria::getInfoGroup()->addStringString("Laser Loc Status", 10, new ArRetFunctorC<std::string, ArLocalizationTask>(&locTask, &ArLocalizationTask::getStateName));
@@ -992,137 +993,6 @@ int main(int argc, char **argv)
 	    new ArRetFunctorC<int, ArLaser>(laser,
 					 &ArLaser::getReadingCount));
   }
-
-
-  Aria::getInfoGroup()->addStringDouble(
-	  "Laser Loc Score", 8,
-	  new ArRetFunctorC<double, ArLocalizationTask>(
-		  &locTask, &ArLocalizationTask::getLocalizationScore),
-	  "%.03f");
-
-  Aria::getInfoGroup()->addStringBool(
-	  "Laser Loc Lost", 8,
-	  new ArRetFunctorC<bool, ArLocalizationTask>(
-		  &locTask, &ArLocalizationTask::getRobotIsLostFlag));
-  Aria::getInfoGroup()->addStringBool(
-	  "Laser Loc Idle", 8,
-	  new ArRetFunctorC<bool, ArLocalizationTask>(
-		  &locTask, &ArLocalizationTask::getIdleFlag));
-
-  Aria::getInfoGroup()->addStringInt(
-	  "Laser Loc Num Samples", 8,
-	  new ArRetFunctorC<int, ArLocalizationTask>(
-		  &locTask, &ArLocalizationTask::getCurrentNumSamples),
-	  "%4d");
-
-  const char *dopfmt = "%2.4f";
-  const char *posfmt = "%2.8f";
-  const char *altfmt = "%3.6f m";
-  Aria::getInfoGroup()->addStringString(
-	    "GPS Fix Mode", 25,
-	    new ArConstRetFunctorC<const char*, ArGPS>(gps, &ArGPS::getFixTypeName)
-    );
-  Aria::getInfoGroup()->addStringInt(
-	    "GPS Num. Satellites", 4,
-	    new ArConstRetFunctorC<int, ArGPS>(gps, &ArGPS::getNumSatellitesTracked)
-    );
-  Aria::getInfoGroup()->addStringDouble(
-	    "GPS HDOP", 12,
-	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getHDOP),
-      dopfmt
-    );
-  Aria::getInfoGroup()->addStringDouble(
-	    "GPS VDOP", 5,
-	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getVDOP),
-      dopfmt
-    );
-  Aria::getInfoGroup()->addStringDouble(
-	    "GPS PDOP", 5,
-	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getPDOP),
-      dopfmt
-    );
-  Aria::getInfoGroup()->addStringDouble(
-	    "Latitude", 15,
-	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getLatitude),
-      posfmt
-    );
-  Aria::getInfoGroup()->addStringDouble(
-	    "Longitude", 15,
-	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getLongitude),
-      posfmt
-    );
-  Aria::getInfoGroup()->addStringDouble(
-	    "Altitude", 8,
-	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getAltitude),
-      altfmt
-    );
-
-  // only some GPS receivers provide these, but you can uncomment them
-  // here to enable them if yours does.
-  /*
-  const char *errfmt = "%2.4f m";
-  Aria::getInfoGroup()->addStringDouble(
-	    "GPS Lat. Err.", 6,
-	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getLatitudeError),
-      errfmt
-    );
-  Aria::getInfoGroup()->addStringDouble(
-	    "GPS Lon. Err.", 6,
-	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getLongitudeError),
-      errfmt
-    );
-  Aria::getInfoGroup()->addStringDouble(
-	    "GPS Alt. Err.", 6,
-	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getAltitudeError),
-      errfmt
-    );
-  */
-
-  Aria::getInfoGroup()->addStringDouble(
-    "GPS Loc Score", 8,
-    new ArRetFunctorC<double, ArGPSLocalizationTask>(
-      &gpsLocTask, &ArGPSLocalizationTask::getLocalizationScore),
-    "%.03f"
-  );
-
-  Aria::getInfoGroup()->addStringBool(
-    "GPS Loc Lost", 8,
-    new ArRetFunctorC<bool, ArGPSLocalizationTask>(
-      &gpsLocTask, &ArGPSLocalizationTask::getRobotIsLostFlag)
-  );
-
-  Aria::getInfoGroup()->addStringBool(
-    "GPS Loc Idle", 8,
-    new ArRetFunctorC<bool, ArGPSLocalizationTask>(
-      &gpsLocTask, &ArGPSLocalizationTask::getIdleFlag)
-  );
-
-
-  // Display gyro status if gyro is enabled and is being handled by the firmware (gyro types 2, 3, or 4).
-  // (If the firmware detects an error communicating with the gyro or IMU it
-  // returns a flag, and stops using it.)
-  // (This gyro type parameter, and fault flag, are only in ARCOS, not Seekur firmware)
-  if(robot.getOrigRobotConfig() && robot.getOrigRobotConfig()->getGyroType() > 1)
-  {
-    Aria::getInfoGroup()->addStringString(
-          "Gyro/IMU Status", 10,
-          new ArGlobalRetFunctor1<const char*, ArRobot*>(&getGyroStatusString, &robot)
-      );
-  }
-
-  // Display system CPU and wireless network status
-  ArSystemStatus::startPeriodicUpdate(1000); // update every 1 second
-  Aria::getInfoGroup()->addStringDouble("CPU Use", 10, ArSystemStatus::getCPUPercentFunctor(), "% 4.0f%%");
-  Aria::getInfoGroup()->addStringInt("Wireless Link Quality", 9, ArSystemStatus::getWirelessLinkQualityFunctor(), "%d");
-  Aria::getInfoGroup()->addStringInt("Wireless Link Noise", 9, ArSystemStatus::getWirelessLinkNoiseFunctor(), "%d");
-  Aria::getInfoGroup()->addStringInt("Wireless Signal", 9, ArSystemStatus::getWirelessLinkSignalFunctor(), "%d");
-
-
-  // stats on how far its driven since software started
-  Aria::getInfoGroup()->addStringDouble("Distance Travelled (m)", 20, new ArRetFunctorC<double, ArRobot>(&robot, &ArRobot::getOdometerDistanceMeters), "%.2f");
-  Aria::getInfoGroup()->addStringDouble("Run time (min)", 20, new
-ArRetFunctorC<double, ArRobot>(&robot, &ArRobot::getOdometerTimeMinutes),
-"%.2f");
 
 
   // Setup the dock if there is a docking system on board.
@@ -1362,12 +1232,11 @@ ArRetFunctorC<double, ArRobot>(&robot, &ArRobot::getOdometerTimeMinutes),
   // Set up localization switcher. laser should start out active.
   gpsLocTask.setIdleFlag(true);
   LocSwitcher locSwitch(&robot, &locTask, &gpsLocTask, &commands);
-  Aria::getInfoGroup()->addStringString("Current Localization", 10, new ArRetFunctorC<std::string, LocSwitcher>(&locSwitch, &LocSwitcher::getActiveLocName));
 
   LocSwitchAtGoal locSwitchAtGoal(&pathTask, &locSwitch, "SwitchToGPS", "SwitchToLaser");
 
   // GPS Map Tools
-  GPSMapTools gpsMapTools(gps, &robot, &commands, &map, &serverMap, &popupServer);
+  GPSMapTools gpsMapTools(gps, &robot, &commands, &map, &serverMap, &serverLocHandler, &popupServer);
 
   // Do an initial localization of the robot. ARNL and SONARNL try all the home points
   // in the map, as well as the robot's current odometric position, as possible
@@ -1383,9 +1252,150 @@ ArRetFunctorC<double, ArRobot>(&robot, &ArRobot::getOdometerTimeMinutes),
   gpsLocTask.localizeRobotInMapInit(robot.getPose(), 0.0, 0.0, 0.0, 0.1);
 
 
-  // Let the client switch manager (for multirobot) spin off into its own thread
-  // TODO move to multirobot example?
-  clientSwitch.runAsync();
+
+  Aria::getInfoGroup()->addStringString("Current Localization", 10, new ArRetFunctorC<std::string, LocSwitcher>(&locSwitch, &LocSwitcher::getActiveLocName));
+
+  Aria::getInfoGroup()->addStringDouble(
+	  "Laser Loc Score", 8,
+	  new ArRetFunctorC<double, ArLocalizationTask>(
+		  &locTask, &ArLocalizationTask::getLocalizationScore),
+	  "%.03f");
+
+  Aria::getInfoGroup()->addStringBool(
+	  "Laser Loc Lost", 8,
+	  new ArRetFunctorC<bool, ArLocalizationTask>(
+		  &locTask, &ArLocalizationTask::getRobotIsLostFlag));
+  Aria::getInfoGroup()->addStringBool(
+	  "Laser Loc Idle", 8,
+	  new ArRetFunctorC<bool, ArLocalizationTask>(
+		  &locTask, &ArLocalizationTask::getIdleFlag));
+
+  Aria::getInfoGroup()->addStringInt(
+	  "Laser Loc Num Samples", 8,
+	  new ArRetFunctorC<int, ArLocalizationTask>(
+		  &locTask, &ArLocalizationTask::getCurrentNumSamples),
+	  "%4d");
+
+  const char *dopfmt = "%2.4f";
+  const char *posfmt = "%2.8f";
+  const char *altfmt = "%3.6f m";
+  Aria::getInfoGroup()->addStringString(
+	    "GPS Fix Mode", 25,
+	    new ArConstRetFunctorC<const char*, ArGPS>(gps, &ArGPS::getFixTypeName)
+    );
+  Aria::getInfoGroup()->addStringInt(
+	    "GPS Num. Satellites", 4,
+	    new ArConstRetFunctorC<int, ArGPS>(gps, &ArGPS::getNumSatellitesTracked)
+    );
+  Aria::getInfoGroup()->addStringDouble(
+	    "GPS HDOP", 12,
+	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getHDOP),
+      dopfmt
+    );
+  Aria::getInfoGroup()->addStringDouble(
+	    "GPS VDOP", 5,
+	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getVDOP),
+      dopfmt
+    );
+  Aria::getInfoGroup()->addStringDouble(
+	    "GPS PDOP", 5,
+	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getPDOP),
+      dopfmt
+    );
+  Aria::getInfoGroup()->addStringDouble(
+	    "Latitude", 15,
+	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getLatitude),
+      posfmt
+    );
+  Aria::getInfoGroup()->addStringDouble(
+	    "Longitude", 15,
+	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getLongitude),
+      posfmt
+    );
+  Aria::getInfoGroup()->addStringDouble(
+	    "Altitude", 8,
+	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getAltitude),
+      altfmt
+    );
+
+  // only some GPS receivers provide these, but you can uncomment them
+  // here to enable them if yours does.
+  /*
+  const char *errfmt = "%2.4f m";
+  Aria::getInfoGroup()->addStringDouble(
+	    "GPS Lat. Err.", 6,
+	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getLatitudeError),
+      errfmt
+    );
+  Aria::getInfoGroup()->addStringDouble(
+	    "GPS Lon. Err.", 6,
+	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getLongitudeError),
+      errfmt
+    );
+  Aria::getInfoGroup()->addStringDouble(
+	    "GPS Alt. Err.", 6,
+	    new ArConstRetFunctorC<double, ArGPS>(gps, &ArGPS::getAltitudeError),
+      errfmt
+    );
+  */
+
+  Aria::getInfoGroup()->addStringTime("GPS Timestamp", 10, 
+    new ArConstRetFunctorC<ArTime, ArGPS>(gps, &ArGPS::getGPSPositionTimestamp)
+  );
+
+  Aria::getInfoGroup()->addStringDouble(
+    "GPS Loc Score", 8,
+    new ArRetFunctorC<double, ArGPSLocalizationTask>(
+      &gpsLocTask, &ArGPSLocalizationTask::getLocalizationScore),
+    "%.03f"
+  );
+
+  Aria::getInfoGroup()->addStringBool(
+    "GPS Loc Lost", 8,
+    new ArRetFunctorC<bool, ArGPSLocalizationTask>(
+      &gpsLocTask, &ArGPSLocalizationTask::getRobotIsLostFlag)
+  );
+
+  Aria::getInfoGroup()->addStringBool(
+    "GPS Loc Idle", 8,
+    new ArRetFunctorC<bool, ArGPSLocalizationTask>(
+      &gpsLocTask, &ArGPSLocalizationTask::getIdleFlag)
+  );
+
+
+  // Display gyro status if gyro is enabled and is being handled by the firmware (gyro types 2, 3, or 4).
+  // (If the firmware detects an error communicating with the gyro or IMU it
+  // returns a flag, and stops using it.)
+  // (This gyro type parameter, and fault flag, are only in ARCOS, not Seekur firmware)
+  int gyrotype = -1;
+  if(robot.getOrigRobotConfig())
+    gyrotype = robot.getOrigRobotConfig()->getGyroType();
+  ArLog::log(ArLog::Normal, "Robot gyro: %d", gyrotype);
+  if(gyrotype > 1)
+  {
+    Aria::getInfoGroup()->addStringString(
+          "Gyro/IMU Status", 10,
+          new ArGlobalRetFunctor1<const char*, ArRobot*>(&getGyroStatusString, &robot)
+      );
+      // TODO replace with ArSeekurIMU object with status and values
+  }
+
+  // Display system CPU and wireless network status
+  ArSystemStatus::startPeriodicUpdate(1000); // update every 1 second
+  Aria::getInfoGroup()->addStringDouble("CPU Use", 10, ArSystemStatus::getCPUPercentFunctor(), "% 4.0f%%");
+  Aria::getInfoGroup()->addStringInt("Wireless Link Quality", 9, ArSystemStatus::getWirelessLinkQualityFunctor(), "%d");
+  Aria::getInfoGroup()->addStringInt("Wireless Link Noise", 9, ArSystemStatus::getWirelessLinkNoiseFunctor(), "%d");
+  Aria::getInfoGroup()->addStringInt("Wireless Signal", 9, ArSystemStatus::getWirelessLinkSignalFunctor(), "%d");
+
+
+  // stats on how far its driven since software started
+  Aria::getInfoGroup()->addStringDouble("Distance Travelled (m)", 20, new ArRetFunctorC<double, ArRobot>(&robot, &ArRobot::getOdometerDistanceMeters), "%.2f");
+  Aria::getInfoGroup()->addStringDouble("Run time (min)", 20, new
+ArRetFunctorC<double, ArRobot>(&robot, &ArRobot::getOdometerTimeMinutes),
+"%.2f");
+
+
+
 
   // Start the networking server's thread
   server.runAsync();
