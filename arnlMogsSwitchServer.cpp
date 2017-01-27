@@ -1089,13 +1089,13 @@ int main(int argc, char **argv)
   // of where the robot is between runs...  after we try and restore
   // from this file it will start saving the robot's pose into the
   // file
-  ArPoseStorage poseStorage(&robot);
+//  ArPoseStorage poseStorage(&robot);
   /// if we could restore the pose from then set the sim there (this
   /// won't do anything to the real robot)... if we couldn't restore
   /// the pose then just reset the position of the robot (which again
   /// won't do anything to the real robot)
-  if (poseStorage.restorePose("robotPose"))
-    serverLocHandler.setSimPose(robot.getPose());
+//  if (poseStorage.restorePose("robotPose"))
+//    serverLocHandler.setSimPose(robot.getPose());
   //else
  //   robot.com(ArCommands::SIM_RESET);
 
