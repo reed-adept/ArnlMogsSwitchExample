@@ -1,0 +1,5 @@
+#!/bin/sh
+nohup ./arnlMogsSwitchServer >log.txt 2>&1 &
+echo "Running arnlMogsSwitchServer in background, with output sent to log.txt file"
+echo "You can monitor the log messages with this command:\n\ttail -F log.txt"
+echo "Kill arnlMogsSwitchServer with\n\tkillall arnlMogsSwitchServer"
