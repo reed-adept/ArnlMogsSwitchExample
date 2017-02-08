@@ -26,7 +26,7 @@ which stops the robot, disables the previous localization task (by making it be 
 for that task to become idle (note that the localization tasks are asynchronous threads that
 are always running), sets the new localization method to be active, and initializes the new
 localization task using the robot's current position, and waits for localization to be
-valid (not lost). 
+valid (not lost).   This thread will then exit.
 
 Note that when switching to GPS localization, the robot should be in a good location to quickly
 acquire an accurate GPS fix.   Similarly, when switching to Laser localization, the robot must
@@ -36,4 +36,10 @@ be in a mapped area with good visibilty by the laser sensor to mapped objects.
 both GPS and Laser localization manually before switching to them for the first time
 (for Laser, use "Localize to Point".  For GPS, use "DriveForHeadingBegin" and "DriveForHeadingEnd".
 the localization tasks will not work if they remain "uninitialized".)
+
+To display the Custom Commands in MobileEyes, either right-click on the toolbar, and enable "Advanced", or open the Custom Commands window from the Tools menu.
+
+To display the Custom Details in MobileEyes, enable "Details" and "Custom Details" via the View menu.
+
+`arnlMogsSwitchServer` will also log useful information via its output or log file. 
 
